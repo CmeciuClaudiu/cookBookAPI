@@ -31,5 +31,4 @@ Endpoints:
   
    VALIDATIONS are done in both backend and frontend layers. This application has been made only for educational purposes so i did not consider necesarry
    implementig a SSL certificate to run under https.
-  
-  HOSTING ADDRESS: http://82.79.81.113:5000 (It's hosted on my personal computer so if the link doesnt work it means at the moment it's offline)
+
