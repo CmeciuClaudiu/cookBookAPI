@@ -27,8 +27,4 @@ Endpoints:
     
     -POST recipe: Posts a new recipe in the DB. (in order to do that you would need administrator permissions)
     
-  Other details: 
-  
-   VALIDATIONS are done in both backend and frontend layers. This application has been made only for educational purposes so i did not consider necesarry
-   implementig a SSL certificate to run under https.
 
