@@ -17,6 +17,10 @@ Endpoints:
     
     -DELETE users: Administrator can delete other users (with lower permissions)
     
+    -POST user reviews for specific recipes
+    
+    -GET all reviews from DB for a specific recipe
+    
   RECIPES:
     
     -GET ingredients: Gets all ingredients from the DB (I've tried to add all possible ingredients) (everyone allowed)
@@ -26,5 +30,11 @@ Endpoints:
     -GET recipe: Gets all ingredients, pictures, instructions and details for a specific recipe (by ID). (everyone allowed)
     
     -POST recipe: Posts a new recipe in the DB. (in order to do that you would need administrator permissions)
+    
+  CHAT (Live chat using SignalR):
+  
+    -POST : Add user messages from live chat into database
+    
+    -GET : Get all message history for the last 48 hours
     
 
