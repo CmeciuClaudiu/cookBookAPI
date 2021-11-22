@@ -40,6 +40,21 @@ namespace cookbookAPI.Controllers
             return usersManager.PostUserInDB(user);
         }
 
+        [HttpPost]
+        [Route("comments")]
+        public bool PostUsersComments(Managers.Contract.Model.UsersComment userComment)
+        {
+            return usersManager.PostComment(userComment);
+        }
+
+        [HttpGet]
+        [Route("comments")]
+        public List<Managers.Contract.Model.UsersComment>GetUsersComments(string recipeId)
+        {
+            return usersManager.GetCommentsForRecipe(recipeId);
+        }
+
+
         // PUT api/<AccountsController>/5
         [HttpPut]
         public Managers.Contract.Model.User Put(Managers.Contract.Model.User user, string username, string password)

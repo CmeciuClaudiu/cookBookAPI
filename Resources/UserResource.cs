@@ -28,7 +28,7 @@ namespace cookbookAPI.Resources
             authDetailsDbObject.Id = Guid.NewGuid().ToString();
             authDetailsDbObject.Email = user.Email;
             authDetailsDbObject.Key = Encryptor.CreateSaltForEncryption();
-            authDetailsDbObject.Password = Encryptor.Encrypt(user.Password,authDetailsDbObject.Key);
+            authDetailsDbObject.Password = Encryptor.Encrypt(user.Password, authDetailsDbObject.Key);
             authDetailsDbObject.UsersId = userDbObject.Id;
 
             context.Add(authDetailsDbObject);
@@ -46,7 +46,7 @@ namespace cookbookAPI.Resources
         public string GetSalt(string id)
         {
             return context.AuthDetails.Where(q => q.UsersId == id)
-                                                    .Select(u=>u.Key).FirstOrDefault();
+                                                    .Select(u => u.Key).FirstOrDefault();
         }
 
         public string GetUserId(string username)
@@ -59,8 +59,8 @@ namespace cookbookAPI.Resources
         {
             var userQueryResult = context.Users.FirstOrDefault(u => u.UserName == username);
             var authQueryResult = context.AuthDetails.FirstOrDefault(a => a.UsersId == userQueryResult.Id);
-   
-            User userDetails = MapObject.MapObj<EFCore.UsersDatabaseModel.User, User >(userQueryResult);
+
+            User userDetails = MapObject.MapObj<EFCore.UsersDatabaseModel.User, User>(userQueryResult);
             userDetails.Email = authQueryResult.Email;
 
             return userDetails;
@@ -100,7 +100,56 @@ namespace cookbookAPI.Resources
 
         public bool IsUserUnique(string username)
         {
-            return context.Users.Any(u=>u.UserName==username);
+            return context.Users.Any(u => u.UserName == username);
+        }
+
+        public void PostUserChatMessage(ChatMsg message)
+        {
+            EFCore.UsersDatabaseModel.Messages dbMessageObject;
+            dbMessageObject = MapObject.MapObj<ChatMsg, EFCore.UsersDatabaseModel.Messages>(message);
+            context.Messages.Add(dbMessageObject);
+            context.SaveChanges();
+        }
+
+        public List<ChatMsg> GetChatMsgHistory(DateTime time)
+        {
+            var msgHistory = context.Messages.Where(date => date.DateTime >= time)
+                                             .OrderByDescending(f=> f.DateTime)
+                                             .Select(message => new ChatMsg
+                                             {
+                                                 Id = message.Id,
+                                                 Username = message.Username,
+                                                 Message = message.Message,
+                                                 DateTime = message.DateTime.ToLocalTime()
+                                             }).ToList();
+
+            return msgHistory;
+        }
+
+        public bool SaveUserComment(UsersComment usersComment)
+        {
+            EFCore.UsersDatabaseModel.UserComment usersCommentDbObject;
+            usersCommentDbObject = MapObject.MapObj<UsersComment, EFCore.UsersDatabaseModel.UserComment>(usersComment);
+            context.UserComments.Add(usersCommentDbObject);
+            context.SaveChanges();
+
+            return true;
+        }
+
+        public List<UsersComment> GetRecipeCommentsFromDb(string recipeId)
+        {
+            return MapObject.MapObjList<EFCore.UsersDatabaseModel.UserComment, UsersComment>(context.UserComments.Where(p => p.RecipesId == recipeId)
+                                                                                                                 .OrderByDescending(q => q.CurrentDate)
+                                                                                                                 .Select(comment => new EFCore.UsersDatabaseModel.UserComment
+                                                                                                                 {
+                                                                                                                     Id = comment.Id,
+                                                                                                                     RecipesId = comment.RecipesId,
+                                                                                                                     UserName = comment.UserName,
+                                                                                                                     Message = comment.Message,
+                                                                                                                     Rating = comment.Rating,
+                                                                                                                     CurrentDate = comment.CurrentDate.ToLocalTime()
+                                                                                                                 })
+                                                                                                                 .ToList());
         }
     }
 }

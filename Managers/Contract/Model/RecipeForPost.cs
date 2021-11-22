@@ -19,7 +19,6 @@ namespace cookbookAPI.Managers.Contract.Model
         public int DishType { get; set; }
 
         [Required]
-        [RegularExpression("([1-9]|[1-9][0-9]|[1-4][0-9][0-9])")]
         public int? PreparationTime { get; set; }
 
         [Required]

@@ -10,5 +10,7 @@ namespace cookbookAPI.Managers.Contract
         List<User> GetAllUsersList(string name, string password);
         User EditUserInDb(User user,string username, string password);
         string DeleteUserFromDb(string username, string loggedInUser, string password);
+        bool PostComment(UsersComment userComment);
+        List<UsersComment> GetCommentsForRecipe(string recipeId);
     }
 }

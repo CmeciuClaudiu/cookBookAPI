@@ -3,6 +3,7 @@ using cookbookAPI.Managers.Contract;
 using cookbookAPI.Managers.Contract.Model;
 using cookbookAPI.Resources.Contract;
 using cookbookAPI.Utilities;
+using System;
 using System.Collections.Generic;
 
 namespace cookbookAPI.Managers
@@ -84,6 +85,18 @@ namespace cookbookAPI.Managers
 
             usrName.UserName = "This username already exists!";
             return usrName;
+        }
+
+        public bool PostComment(UsersComment usersComment)
+        {
+            usersComment.Id = Guid.NewGuid().ToString();
+
+            return userResource.SaveUserComment(MapObject.MapObj<UsersComment, Resources.Contract.Model.UsersComment>(usersComment));
+        }
+
+        public List<UsersComment> GetCommentsForRecipe(string recipeId)
+        {
+            return MapObject.MapObjList <Resources.Contract.Model.UsersComment, UsersComment>(userResource.GetRecipeCommentsFromDb(recipeId));
         }
     }
 }

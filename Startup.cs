@@ -1,5 +1,6 @@
 using cookbookAPI.EFCore.Context;
 using cookbookAPI.Engine;
+using cookbookAPI.Hubs;
 using cookbookAPI.Managers;
 using cookbookAPI.Resources;
 using Microsoft.AspNetCore.Builder;
@@ -26,12 +27,14 @@ namespace cookbookAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddSignalR();
 
             services.AddScoped<Managers.Contract.IRecipesManager, RecipesManager>();
             services.AddScoped<Managers.Contract.IUsersManager, UsersManager>();
             services.AddScoped<Engine.Contract.IEligibilityEngine, EligibilityEngine>();
             services.AddScoped<Resources.Contract.IRecipeResource, RecipeResource>();
             services.AddScoped<Resources.Contract.IUserResource, UserResource>();
+            services.AddScoped<Managers.Contract.IChatMsgManager, ChatMsgManager>();
 
             services.AddSwaggerGen();
 
@@ -48,7 +51,8 @@ namespace cookbookAPI
             services.AddCors(c => c.AddPolicy("AllowOrigin", options => {
                 options.AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowAnyOrigin();
+                        .WithOrigins("http://localhost:4200","http://cookbook.ddns.net")
+                        .AllowCredentials();
                         }));
         }
 
@@ -80,6 +84,7 @@ namespace cookbookAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chatsocket");
             });
         }
     }

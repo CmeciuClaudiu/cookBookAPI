@@ -9,7 +9,6 @@ namespace cookbookAPI.Engine
     public class EligibilityEngine:IEligibilityEngine
     {
         private readonly IUserResource userResource;
-
         public EligibilityEngine(IUserResource _userResource)
         {
             userResource = _userResource;
